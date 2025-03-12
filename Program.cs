@@ -1,9 +1,10 @@
-﻿using System.Data.SQLite;
-using Dapper;
-using TCSA.OOP.CodingTracker;
-using TCSA.OOP.CodingTracker.Controllers;
+﻿using TCSA.OOP.CodingTracker.Controllers;
+using System.Configuration;
 
-var connectionController = new ConnectionController("Data Source=tracker.db");
+var defaultProject = Boolean.Parse(ConfigurationManager.AppSettings.Get("CreateDefaultProject") ?? "false");
+var connectionString = ConfigurationManager.ConnectionStrings["Tracker"].ConnectionString;
+
+var connectionController = new ConnectionController(connectionString);
 
 var connection = connectionController.Initialize();
 
@@ -36,4 +37,3 @@ var connection = connectionController.Initialize();
     // Total goal
         // How many hours a day to reach their goal
         // How many days based on their average
-        

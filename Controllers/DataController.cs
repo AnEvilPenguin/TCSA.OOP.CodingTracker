@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Data.SQLite;
+using static TCSA.OOP.CodingTracker.Util.Helpers;
 
 namespace TCSA.OOP.CodingTracker.Controllers;
 
@@ -26,9 +27,6 @@ internal class DataController ()
         
         return connection;
     }
-
-    internal string FormatDate(DateTime date) => 
-        date.ToString("yyyy-MM-dd HH:mm:ss");
 
     private void InitSessionsTable(SQLiteConnection connection)
     {
@@ -82,10 +80,11 @@ internal class DataController ()
         var command = new SQLiteCommand(insertQuery, connection);
         
         var date = DateTime.UtcNow;
+        var dateString = FormatDate(date);
             
         command.Parameters.AddWithValue("$Name", "Default Project");
-        command.Parameters.AddWithValue("$Created", date);
-        command.Parameters.AddWithValue("$Updated", date);
+        command.Parameters.AddWithValue("$Created", dateString);
+        command.Parameters.AddWithValue("$Updated", dateString);
 
         command.ExecuteScalar();
     }

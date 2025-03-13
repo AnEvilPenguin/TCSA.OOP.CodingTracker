@@ -1,9 +1,33 @@
 ﻿using TCSA.OOP.CodingTracker.Controllers;
-using System.Configuration;
+using Dapper;
+using TCSA.OOP.CodingTracker.Model;
+using TCSA.OOP.CodingTracker.Util;
 
-var connectionController = new DataController();
+var crudController = new CrudController();
 
-var connection = connectionController.Initialize();
+// move to crud where we do all the work?
+
+var projects = crudController.ListProjects().ToList();
+
+Console.WriteLine($"Projects: {projects.Count}");
+
+var project = projects.First();
+
+var session = new Session()
+{
+    Project = project,
+    Name = "Today"
+};
+
+crudController.CreateSession(session);
+
+var sessions = crudController.ListSessions().ToList();
+
+foreach (var session1 in sessions)
+{
+    Console.WriteLine($"Session: {session1.Name}");
+}
+
 
 // Requirements
 // Log time spent coding

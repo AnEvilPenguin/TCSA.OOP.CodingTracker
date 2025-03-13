@@ -33,7 +33,7 @@ internal class DataController ()
                 'Created' TEXT NOT NULL,
                 'Updated' TEXT NOT NULL,
                 'Started' TEXT NOT NULL,
-                'Finished' TEXT NOT NULL,
+                'Finished' TEXT,
                 'Project' INTEGER NOT NULL,
                 FOREIGN KEY('Project') REFERENCES 'Projects'('Id') ON UPDATE CASCADE
             );";

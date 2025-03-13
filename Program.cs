@@ -1,10 +1,7 @@
 ﻿using TCSA.OOP.CodingTracker.Controllers;
 using System.Configuration;
 
-var defaultProject = Boolean.Parse(ConfigurationManager.AppSettings.Get("CreateDefaultProject") ?? "false");
-var connectionString = ConfigurationManager.ConnectionStrings["Tracker"].ConnectionString;
-
-var connectionController = new ConnectionController(connectionString);
+var connectionController = new DataController();
 
 var connection = connectionController.Initialize();
 

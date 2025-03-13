@@ -1,11 +1,17 @@
-﻿using System.Data.SQLite;
+﻿using System.Configuration;
+using System.Data.SQLite;
 
 namespace TCSA.OOP.CodingTracker.Controllers;
 
-internal class ConnectionController (string connectionString)
+internal class DataController ()
 {
     internal SQLiteConnection Initialize()
     {
+        var defaultProject = Boolean.Parse(ConfigurationManager.AppSettings.Get("CreateDefaultProject") ?? "false");
+        var seedTestData = Boolean.Parse(ConfigurationManager.AppSettings.Get("SeedTestData") ?? "false");
+        
+        var connectionString = ConfigurationManager.ConnectionStrings["Tracker"].ConnectionString;
+        
         var connection = new SQLiteConnection(connectionString);
      
         connection.Open();

@@ -19,10 +19,16 @@ internal class DataController ()
         InitProjectsTable(connection);
         InitSessionsTable(connection);
         
+        if (defaultProject)
+            InjectDefaultProject(connection);
+        
         connection.Close();
         
         return connection;
     }
+
+    internal string FormatDate(DateTime date) => 
+        date.ToString("yyyy-MM-dd HH:mm:ss");
 
     private void InitSessionsTable(SQLiteConnection connection)
     {
@@ -53,5 +59,34 @@ internal class DataController ()
             );";
         
         new SQLiteCommand(query, connection).ExecuteNonQuery();
+    }
+
+    private void InjectDefaultProject(SQLiteConnection connection)
+    {
+        var checkQuery = @"
+            SELECT Id
+            FROM Projects
+            WHERE Name = 'Default Project'
+            LIMIT 1;
+        ";
+        
+        var exists = new SQLiteCommand(checkQuery, connection).ExecuteScalar();
+        
+        if (exists != null)
+            return;
+        
+        var insertQuery = @"
+            INSERT INTO Projects (Name, Created, Updated) VALUES($Name, $Created, $Updated);
+        ";
+
+        var command = new SQLiteCommand(insertQuery, connection);
+        
+        var date = DateTime.UtcNow;
+            
+        command.Parameters.AddWithValue("$Name", "Default Project");
+        command.Parameters.AddWithValue("$Created", date);
+        command.Parameters.AddWithValue("$Updated", date);
+
+        command.ExecuteScalar();
     }
 }

@@ -1,32 +1,7 @@
-﻿using TCSA.OOP.CodingTracker.Controllers;
-using Dapper;
-using TCSA.OOP.CodingTracker.Model;
-using TCSA.OOP.CodingTracker.Util;
+﻿using TCSA.OOP.CodingTracker;
 
-var crudController = new CrudController();
-
-// move to crud where we do all the work?
-
-var projects = crudController.ListProjects().ToList();
-
-Console.WriteLine($"Projects: {projects.Count}");
-
-var project = projects.First();
-
-var session = new Session()
-{
-    Project = project,
-    Name = "Today"
-};
-
-crudController.CreateSession(session);
-
-var sessions = crudController.ListSessions().ToList();
-
-foreach (var session1 in sessions)
-{
-    Console.WriteLine($"Session: {session1.Name}");
-}
+return new UserInterface()
+    .Run(args);
 
 
 // Requirements
@@ -37,6 +12,9 @@ foreach (var session1 in sessions)
 // Need to use Spectre.Console for input and output
 // Separation of concerns
 // Prompt user with a specific format for date and time to be in and not allow any other format
+// Take command line if possible
+    // eg gh repo create
+    // if args.length > 0 parse them and run otherwise prompty prompt
 // Use a configuration file to contain database path and connection strings
     // Perhaps guide the user through setting these if it doesn't exist yet?
 // Need to use Dapper ORM for data access

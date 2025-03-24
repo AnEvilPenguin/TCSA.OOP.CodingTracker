@@ -4,23 +4,10 @@ using TCSA.OOP.CodingTracker.Model;
 
 namespace TCSA.OOP.CodingTracker.View;
 
-internal class ProjectsView
+internal static class TableView
 {
-    private readonly CrudController _controller = new();
-
-    internal int List()
+    internal static void List(IEnumerable<Project> projects)
     {
-        IEnumerable<Project> projects;
-        try
-        {
-            projects = _controller.ListProjects();
-        }
-        catch (Exception ex)
-        {
-            AnsiConsole.MarkupLine($"[red]Error:[/] {ex.Message}");
-            return 1;
-        }
-        
         var table = new Table();
         
         table.AddColumn(new TableColumn("Id").Centered());
@@ -33,7 +20,5 @@ internal class ProjectsView
         }
         
         AnsiConsole.Write(table);
-        
-        return 0;
     }
 }

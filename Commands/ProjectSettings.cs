@@ -6,5 +6,5 @@ namespace TCSA.OOP.CodingTracker.View;
 
 internal class ProjectSettings : CommandSettings
 {
-    internal ProjectsView View { get; private set; } = new ProjectsView();
+    internal ProjectController Controller { get; private set; } = new(); 
 }

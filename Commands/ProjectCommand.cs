@@ -5,5 +5,5 @@ namespace TCSA.OOP.CodingTracker.View;
 internal class ProjectListCommand : Command<ProjectSettings>
 {
     public override int Execute(CommandContext context, ProjectSettings settings) =>
-        settings.View.List();
+        settings.Controller.List();
 }

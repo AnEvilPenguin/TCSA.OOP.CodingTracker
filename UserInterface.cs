@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using Spectre.Console.Cli;
+using TCSA.OOP.CodingTracker.Controllers;
 using TCSA.OOP.CodingTracker.View;
 
 namespace TCSA.OOP.CodingTracker;
@@ -12,7 +13,6 @@ internal enum MenuOptions
 
 internal class UserInterface ()
 {
-    private ProjectsView? _projectView;
     
     internal int Run(string[] args)
     {
@@ -39,7 +39,7 @@ internal class UserInterface ()
 
     private int RunMenu()
     {
-        _projectView = new ProjectsView();
+        var controller = new ProjectController();
         
         while (true)
         {
@@ -53,7 +53,8 @@ internal class UserInterface ()
             if (choice == MenuOptions.Exit)
                 return 0;
 
-            _projectView.List();
+            if (controller.List() == 1)
+                return 1;
             
             AnsiConsole.MarkupLine("Press any key to continue...");
             Console.ReadKey();

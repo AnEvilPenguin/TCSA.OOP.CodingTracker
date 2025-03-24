@@ -6,6 +6,9 @@ namespace TCSA.OOP.CodingTracker.Controllers;
 
 internal class DataController ()
 {
+    // FIXME think about splitting this down better.
+    // Have this just deal with a connection
+    
     internal SQLiteConnection Initialize()
     {
         var defaultProject = Boolean.Parse(ConfigurationManager.AppSettings.Get("CreateDefaultProject") ?? "false");

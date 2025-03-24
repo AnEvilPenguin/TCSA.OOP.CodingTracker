@@ -1,6 +1,25 @@
-﻿using TCSA.OOP.CodingTracker;
+﻿using System.Configuration;
+using System.Data.SQLite;
+using Spectre.Console;
+using TCSA.OOP.CodingTracker;
+using TCSA.OOP.CodingTracker.Controllers;
 
-Console.WriteLine("Hello World!");
+var connectionString = ConfigurationManager.ConnectionStrings["Tracker"].ConnectionString;
+var connection = new SQLiteConnection(connectionString);
+
+SessionController sessionController;
+
+try
+{
+    sessionController = SessionController.GetSessionController(connection);
+}
+catch (Exception ex)
+{
+    AnsiConsole.MarkupLine($"[red]Error:[/] {ex.Message}");
+    return 1;
+}
+
+return new UserInterface(sessionController).Run(args);
 
 
 // Requirements

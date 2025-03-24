@@ -10,5 +10,4 @@ internal class Session
     internal DateTime Updated { get; set; } = DateTime.UtcNow;
     internal DateTime Started { get; set; } = DateTime.UtcNow;
     internal DateTime Finished { get; set; }
-    internal required Project Project { get; set; }
 }

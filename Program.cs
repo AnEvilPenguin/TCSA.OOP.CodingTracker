@@ -1,10 +1,10 @@
 ﻿using TCSA.OOP.CodingTracker;
 
-return new UserInterface()
-    .Run(args);
+Console.WriteLine("Hello World!");
 
 
 // Requirements
+// Log time spent coding
 // Log time spent coding
     // Perhaps some shortcuts to say open a 'session' that can be closed off on completion later
     // Cannot enter the duration, can only enter start and end times

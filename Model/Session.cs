@@ -10,4 +10,16 @@ internal class Session
     internal DateTime Updated { get; set; } = DateTime.UtcNow;
     internal DateTime Started { get; set; } = DateTime.UtcNow;
     internal DateTime? Finished { get; set; }
+
+    internal bool IsValidDate(DateTime date)
+    {
+        var now = DateTime.UtcNow;
+        
+        return now > date;
+    }
+
+    internal bool IsValidFinishDate(DateTime date)
+    {
+        return IsValidDate(date) && date > Started;
+    }
 }

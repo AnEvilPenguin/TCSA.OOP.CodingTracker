@@ -16,6 +16,8 @@ internal enum MenuOptions
 
 internal class UserInterface(SessionController sessionController)
 {
+    private const string ExampleDate = "(e.g. 2020-02-27 14:30)";
+    
     internal int Run(string[] args)
     {
         if (args.Length == 0)
@@ -28,7 +30,7 @@ internal class UserInterface(SessionController sessionController)
     {
         while (true)
         {
-            Console.Clear();
+            AnsiConsole.Clear();
 
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<MenuOptions>()
@@ -75,9 +77,43 @@ internal class UserInterface(SessionController sessionController)
         // If want to set end time do it.
 
         var sessionName = AnsiConsole.Ask<string>("What do you want to [green]name[/] the session?");
-        // TODO more options in general
-
+        
         var session = sessionController.Create(sessionName);
+        
+        bool hasChanges = false;
+
+        var startsNow = AnsiConsole.Confirm("Do you want to start the session now?");
+        
+        if (!startsNow)
+        {
+            DateTime newDate;
+            
+            do
+            {
+                newDate = AnsiConsole.Ask<DateTime>($"Provide a date time for the session start {ExampleDate}");
+            } while(!session.IsValidDate(newDate));
+            
+            session.Started = newDate;
+            hasChanges = true;
+        }
+
+        // TODO consider bumping this off to another method?
+        if (!startsNow && AnsiConsole.Confirm("Do you want to finish the session?"))
+        {
+            DateTime endDate;
+            do
+            {
+                endDate = AnsiConsole.Confirm("Do you want to finish the session now?")
+                    ? DateTime.UtcNow
+                    : AnsiConsole.Ask<DateTime>($"Provide a date time for the session end {ExampleDate}");
+            }while(!session.IsValidFinishDate(endDate));
+
+            session.Finished = endDate;
+            hasChanges = true;
+        }
+        
+        if (hasChanges)
+            sessionController.Update(session);
 
         DisplaySession(session);
     }
@@ -114,6 +150,7 @@ internal class UserInterface(SessionController sessionController)
         
         sessionController.Update(session);
         
+        AnsiConsole.Clear();
         DisplaySession(session);
     }
 

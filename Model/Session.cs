@@ -9,5 +9,5 @@ internal class Session
     internal DateTime Created { get; set; } = DateTime.UtcNow;
     internal DateTime Updated { get; set; } = DateTime.UtcNow;
     internal DateTime Started { get; set; } = DateTime.UtcNow;
-    internal DateTime Finished { get; set; }
+    internal DateTime? Finished { get; set; }
 }

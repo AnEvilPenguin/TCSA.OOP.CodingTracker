@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using TCSA.OOP.CodingTracker.Controllers;
+using TCSA.OOP.CodingTracker.Model;
 using static TCSA.OOP.CodingTracker.View.SessionView;
 
 namespace TCSA.OOP.CodingTracker;
@@ -7,6 +8,7 @@ namespace TCSA.OOP.CodingTracker;
 internal enum MenuOptions
 {
     StartSession,
+    EndSession,
     ListSessions,
     ListOpenSessions,
     Exit
@@ -40,6 +42,10 @@ internal class UserInterface(SessionController sessionController)
             {
                 case MenuOptions.StartSession:
                     StartSession();
+                    break;
+                
+                case MenuOptions.EndSession:
+                    EndSession();
                     break;
 
                 case MenuOptions.ListSessions:
@@ -86,6 +92,29 @@ internal class UserInterface(SessionController sessionController)
     {
         var sessions = sessionController.ListOpen();
         DisplaySessions(sessions);
+    }
+
+    private void EndSession()
+    {
+        var sessions = sessionController.ListOpen().ToList();
+
+        if (sessions.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[red]No sessions available to end.[/]");
+            return;
+        }
+        
+        var session = AnsiConsole.Prompt(
+            new SelectionPrompt<Session>()
+                .Title("Select a [green]session[/] to complete:")
+                .UseConverter(b => b.Name)
+                .AddChoices(sessions));
+
+        session.Finished = DateTime.UtcNow;
+        
+        sessionController.Update(session);
+        
+        DisplaySession(session);
     }
 
     // End session

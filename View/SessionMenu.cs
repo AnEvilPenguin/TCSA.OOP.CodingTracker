@@ -57,17 +57,15 @@ internal class SessionMenu (SessionController sessionController) : AbstractMenu
 
     private void NewSession()
     {
-        var sessions = sessionController.ListOpen();
+        var count = sessionController.ListOpen().Count();
 
-        if (sessions.Any())
+        if (count > 0)
         {
-            // TODO consider if we really want to block
-            // maybe just warn and confirm?
-            PrintError(["You already have a session opened.", "End that before starting a new session."]);
-            return;
+            AnsiConsole.MarkupLine($"[yellow]Warn:[/] There are already [orange]{count}[/] session(s) open.");
+            if (!AnsiConsole.Confirm("Do you want to open another session?"))
+                return;
         }
         
-        // TODO check for open sessions
         var sessionName = AnsiConsole.Ask<string>("What do you want to [green]name[/] the session?");
         
         var start = GetStartDate();

@@ -7,6 +7,8 @@ internal static class SessionView
 {
     internal static void DisplaySession(Session session)
     {
+        AnsiConsole.Clear();
+        
         var table = new Table();
 
         table.AddColumn(new TableColumn("Property"));
@@ -24,6 +26,8 @@ internal static class SessionView
 
     internal static void DisplaySessions(IEnumerable<Session> sessions)
     {
+        AnsiConsole.Clear();
+        
         var table = new Table();
 
         table.AddColumn(new TableColumn("Id").Centered());

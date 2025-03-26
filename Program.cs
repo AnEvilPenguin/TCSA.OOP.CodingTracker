@@ -3,6 +3,7 @@ using System.Data.SQLite;
 using Spectre.Console;
 using TCSA.OOP.CodingTracker;
 using TCSA.OOP.CodingTracker.Controllers;
+using TCSA.OOP.CodingTracker.View;
 
 var connectionString = ConfigurationManager.ConnectionStrings["Tracker"].ConnectionString;
 var connection = new SQLiteConnection(connectionString);
@@ -19,7 +20,7 @@ catch (Exception ex)
     return 1;
 }
 
-return new UserInterface(sessionController).Run(args);
+return new MainMenu(sessionController).Run(args);
 
 
 // Requirements

@@ -46,7 +46,7 @@ internal class SessionController
         new SQLiteCommand(query, _connection).ExecuteNonQuery();
     }
 
-    // TODO CRUD
+    
     internal Session Create(string name)
     {
         const string sql = @"
@@ -61,6 +61,25 @@ internal class SessionController
         });
 
         return new Session { Id = id, Name = name, Created = now, Updated = now, Started = now };
+    }
+
+    internal Session Create(string name, DateTime? startDate, DateTime? finishDate)
+    {
+        const string sql = @"
+            INSERT INTO Sessions (Name, Created, Updated, Started, Finished) 
+                VALUES (@Name, @Created, @Updated, @Started, @Finished) 
+                RETURNING id;
+        ";
+        var now = DateTime.UtcNow;
+        var id = _connection!.QuerySingle<int>(sql, new
+        {
+            Name = name, Created = now, Updated = now, Started = startDate ?? now, Finished = finishDate
+        });
+        
+        return new Session
+        {
+            Id = id, Name = name, Created = now, Updated = now, Started = startDate ?? now, Finished = finishDate
+        };
     }
 
     internal Session Get(int id)

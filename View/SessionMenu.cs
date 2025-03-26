@@ -2,6 +2,7 @@
 using TCSA.OOP.CodingTracker.Controllers;
 using TCSA.OOP.CodingTracker.Model;
 using static TCSA.OOP.CodingTracker.View.SessionView;
+using static TCSA.OOP.CodingTracker.Util.Helpers;
 
 namespace TCSA.OOP.CodingTracker.View;
 
@@ -104,12 +105,47 @@ internal class SessionMenu (SessionController sessionController) : AbstractMenu
         AnsiConsole.Confirm("Do you want to finish the session now?")
             ? DateTime.UtcNow
             // TODO pass start to getdate as lower bound
-            : GetDate("Provide a date time for the session end");
+            : GetDate("Provide a date time for the session end", start);
 
     private DateTime GetDate(string prompt)
     {
-        // TODO bounds and validation
-        return AnsiConsole.Ask<DateTime>($"{prompt}{ExampleDate}");
+        return AnsiConsole.Ask<DateTime>($"{prompt} {ExampleDate}");
+    }
+
+    private DateTime GetDate(string prompt, DateTime? lowerBound)
+    {
+        AnsiConsole.Clear();
+        
+        // First compiled language in '54 lol
+        var lower = lowerBound ?? new DateTime(1954, 1, 1);
+        
+        var upperBound = DateTime.Now;
+
+        var range = $"{FormatDate(lower)} - {FormatDate(upperBound)}";
+        var example = $"{prompt} {ExampleDate}";
+        var ask = $"Provide a date between {range}";
+        
+        AnsiConsole.MarkupLine(example);
+        var selected = AnsiConsole.Ask<DateTime>(ask);
+        
+        Int32 attempts = 0;
+
+        while (upperBound < selected || selected < lowerBound)
+        {
+            AnsiConsole.Clear();
+            
+            // Shame, shame, shame!
+            AnsiConsole.MarkupLine($"Attempt: {++attempts}");
+            
+            PrintError("Date is out of bounds.");
+            AnsiConsole.MarkupLine(example);
+            
+            // FIXME strictly speaking the requirement state to handle a single format only
+            // Also the experience is slightly clunky at the moment.
+            selected = AnsiConsole.Ask<DateTime>(ask);
+        }
+        
+        return selected;
     }
 
     private void AllSessions() =>

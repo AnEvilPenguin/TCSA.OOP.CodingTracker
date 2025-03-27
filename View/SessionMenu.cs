@@ -23,10 +23,7 @@ internal class SessionMenu (SessionController sessionController) : AbstractMenu
     {
         while (true)
         {
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<SessionOptions>()
-                    .Title("What do you want to do next?")
-                    .AddChoices(Enum.GetValues<SessionOptions>()));
+            var choice = GetSelection<SessionOptions>(); 
 
             switch (choice)
             {

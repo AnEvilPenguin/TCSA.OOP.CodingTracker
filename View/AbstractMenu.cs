@@ -30,4 +30,12 @@ internal abstract class AbstractMenu
         
         AnsiConsole.WriteLine();
     }
+
+    protected T GetSelection<T>() where T : struct, Enum
+    {
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<T>()
+                .Title("What do you want to do next?")
+                .AddChoices(Enum.GetValues<T>()));
+    }
 }

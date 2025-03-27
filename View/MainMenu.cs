@@ -8,6 +8,7 @@ namespace TCSA.OOP.CodingTracker.View;
 internal enum MenuOptions
 {
     Sessions,
+    Reports,
     Exit
 }
 
@@ -16,6 +17,7 @@ internal class MainMenu(SessionController sessionController) : AbstractMenu
     private const string ExampleDate = "(e.g. 2020-02-27 14:30)";
     
     private readonly SessionMenu _sessionMenu = new (sessionController);
+    private readonly ReportMenu _reportMenu = new (sessionController);
     
     internal int Run(string[] args)
     {
@@ -40,6 +42,10 @@ internal class MainMenu(SessionController sessionController) : AbstractMenu
             {
                 case MenuOptions.Sessions:
                     _sessionMenu.RunMenu();
+                    break;
+                
+                case MenuOptions.Reports:
+                    _reportMenu.RunMenu();
                     break;
                 
                 case MenuOptions.Exit:

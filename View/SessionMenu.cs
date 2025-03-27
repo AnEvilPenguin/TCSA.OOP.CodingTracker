@@ -63,7 +63,7 @@ internal class SessionMenu (SessionController sessionController) : AbstractMenu
 
         if (count > 0)
         {
-            AnsiConsole.MarkupLine($"[yellow]Warn:[/] There are already [orange]{count}[/] session(s) open.");
+            AnsiConsole.MarkupLine($"[yellow]Warn:[/] There are already [orange3]{count}[/] session(s) open.");
             if (!AnsiConsole.Confirm("Do you want to open another session?"))
                 return;
         }

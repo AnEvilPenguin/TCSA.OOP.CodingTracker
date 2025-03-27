@@ -3,6 +3,7 @@ using TCSA.OOP.CodingTracker.Controllers;
 using TCSA.OOP.CodingTracker.Model;
 using static TCSA.OOP.CodingTracker.View.SessionView;
 using static TCSA.OOP.CodingTracker.Util.Helpers;
+using static TCSA.OOP.CodingTracker.Util.DateTimeValidation;
 
 namespace TCSA.OOP.CodingTracker.View;
 
@@ -125,27 +126,28 @@ internal class SessionMenu (SessionController sessionController) : AbstractMenu
         var example = $"{prompt} {ExampleDate}";
         var ask = $"Provide a date between {range}";
         
-        AnsiConsole.MarkupLine(example);
-        var selected = AnsiConsole.Ask<DateTime>(ask);
-        
-        Int32 attempts = 0;
+        string validationError;
+        DateTime result = default;
 
-        while (upperBound < selected || selected < lowerBound)
+        do
         {
-            AnsiConsole.Clear();
-            
-            // Shame, shame, shame!
-            AnsiConsole.MarkupLine($"Attempt: {++attempts}");
-            
-            PrintError("Date is out of bounds.");
             AnsiConsole.MarkupLine(example);
+            var selected = AnsiConsole.Ask<string>(ask);
+
+            if (!IsValidDateString(selected, out validationError))
+            {
+                PrintError(validationError);
+                continue;
+            }
             
-            // FIXME strictly speaking the requirement state to handle a single format only
-            // Also the experience is slightly clunky at the moment.
-            selected = AnsiConsole.Ask<DateTime>(ask);
-        }
+            DateTime.TryParse(selected, out result);
+
+            if (!IsValidDate(result, lower, upperBound, out validationError))
+                PrintError(validationError);
+
+        } while (!string.IsNullOrEmpty(validationError));
         
-        return selected;
+        return result;
     }
 
     private void AllSessions() =>

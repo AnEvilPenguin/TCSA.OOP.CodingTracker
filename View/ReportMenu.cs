@@ -1,6 +1,6 @@
-﻿using System.Reflection.Emit;
-using Spectre.Console;
+﻿using Spectre.Console;
 using TCSA.OOP.CodingTracker.Controllers;
+using static TCSA.OOP.CodingTracker.View.ReportView;
 
 namespace TCSA.OOP.CodingTracker.View;
 
@@ -30,9 +30,9 @@ internal class ReportMenu (SessionController sessionController) : AbstractMenu
                 default:
                     throw new NotImplementedException($"{choice} is not implemented.");
             }
+            
+            Pause();
         }
-        
-        Pause();
     }
 
     private void MonthlyAverageSession()
@@ -63,29 +63,19 @@ internal class ReportMenu (SessionController sessionController) : AbstractMenu
         });
 
         aggregated.Sort((a, b) => a.Item1.CompareTo(b.Item1));
-
-        var chart = new BarChart()
-            .Width(80)
-            .Label("[green bold underline]Sessions per month[/]")
-            .CenterLabel();
-
-        // TODO Consider how to color things
-        // could do a static value, or could potentially work out percentiles?
-        foreach (var tuple in aggregated)
-        {
-            Color color;
-            
-            if (tuple.Item2 < 5)
-                color = Color.Red;
-            else if (tuple.Item2 < 15)
-                color = Color.Yellow;
-            else
-                color = Color.Green;
-            
-            chart.AddItem(tuple.Item1.ToString("yyyy MMMM"), tuple.Item2, color);
-        }
         
-        AnsiConsole.Write(chart);
-        Pause();
+        var final = aggregated
+            .Select(t => 
+                new Tuple<string, int>(t.Item1.ToString("yyyy MMMM"), t.Item2));
+        
+        DisplayBarChart("Sessions per month", final, (int value) =>
+        {
+            return value switch
+            {
+                < 5 => Color.Red,
+                < 15 => Color.Yellow,
+                _ => Color.Green
+            };
+        });
     }
 }

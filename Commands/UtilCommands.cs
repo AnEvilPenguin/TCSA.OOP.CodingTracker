@@ -1,8 +1,6 @@
-﻿using Bogus;
-using Spectre.Console;
+﻿using Spectre.Console;
 using Spectre.Console.Cli;
 using TCSA.OOP.CodingTracker.Controllers;
-using TCSA.OOP.CodingTracker.Model;
 
 namespace TCSA.OOP.CodingTracker.Commands;
 
@@ -12,22 +10,12 @@ internal class GenerateSampleData : Command<UtilSettings>
     {
         if (context.Data is not SessionController sessionController)
             throw new ApplicationException("Session controller is not set.");
-        
-        var sessionFaker = new Faker<Session>()
-            .RuleFor(s => s.Name, f => $"{f.Hacker.Noun()}-{f.Commerce.Product()}")
-            .RuleFor(s => s.Started, f => f.Date.Past())
-            .RuleFor(
-                s=> s.Finished, 
-                (f,s) => f.Date.Between(s.Started, s.Started.AddDays(3)));
-        
-        var sessions = sessionFaker.Generate(20);
-        
-        var openSessionFaker = new Faker<Session>()
-            .RuleFor(s => s.Name, f => $"{f.Hacker.Noun()}-{f.Hacker.Noun()}")
-            .RuleFor(s => s.Started, f => f.Date.Recent());
-        
-        var openSessions = openSessionFaker.Generate(1);
 
+        var sampleData = new SampleDataController();
+
+        var sessions = sampleData.GenerateSessions(20);
+        var openSessions = sampleData.GenerateOpenSessions(1);
+        
         foreach (var session in sessions.Union(openSessions))
         {
             AnsiConsole.MarkupLine($"[green]Generating[/] [bold]{session.Name}[/]");

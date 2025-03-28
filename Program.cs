@@ -1,12 +1,8 @@
-﻿using System.Configuration;
-using System.Data.SQLite;
-using Spectre.Console;
-using TCSA.OOP.CodingTracker;
+﻿using Spectre.Console;
 using TCSA.OOP.CodingTracker.Controllers;
 using TCSA.OOP.CodingTracker.View;
 
-var connectionString = ConfigurationManager.ConnectionStrings["Tracker"].ConnectionString;
-var connection = new SQLiteConnection(connectionString);
+var connection = DatabaseController.GetConnection();
 
 SessionController sessionController;
 

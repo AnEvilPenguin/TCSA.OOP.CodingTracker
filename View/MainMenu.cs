@@ -1,4 +1,6 @@
 ﻿using Spectre.Console;
+using Spectre.Console.Cli;
+using TCSA.OOP.CodingTracker.Commands;
 using TCSA.OOP.CodingTracker.Controllers;
 using TCSA.OOP.CodingTracker.Model;
 using static TCSA.OOP.CodingTracker.View.SessionView;
@@ -24,7 +26,7 @@ internal class MainMenu(SessionController sessionController) : AbstractMenu
         if (args.Length == 0)
             return RunMenu();
 
-        throw new NotImplementedException("Command line parameters are not implemented.");
+        return RunCommandLine(args);
     }
 
     private int RunMenu()
@@ -55,5 +57,25 @@ internal class MainMenu(SessionController sessionController) : AbstractMenu
                     throw new NotImplementedException($"{choice} is not implemented.");
             }
         }
+    }
+
+    private int RunCommandLine(string[] args)
+    {
+        var app = new CommandApp();
+        app.Configure(config =>
+        {
+            config.AddBranch("Utils", (settings) =>
+            {
+                settings.AddCommand<GenerateSampleData>("GenerateSampleData")
+                    .WithDescription("Generate sample data to test the application.")
+                    .WithData(sessionController);
+                
+                settings.AddCommand<ClearSessions>("ClearSessions")
+                    .WithDescription("Clear all data from the application.")
+                    .WithData(sessionController);
+            });
+        });
+        
+        return app.Run(args);
     }
 }

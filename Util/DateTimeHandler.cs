@@ -12,6 +12,13 @@ public class DateTimeHandler : SqlMapper.TypeHandler<DateTime>
 
     public override DateTime Parse(object value)
     {
+        if (value.ToString()!.EndsWith("Z"))
+        {
+            // If the value is explicitly marked as UTC with 'Z', parse as UTC
+            return DateTime.Parse(value.ToString()!, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        }
+
+        // Otherwise, interpret as local time or leave as unspecified
         return DateTime.Parse(value.ToString()!);
     }
     

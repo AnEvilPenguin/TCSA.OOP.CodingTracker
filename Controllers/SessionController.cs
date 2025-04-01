@@ -74,6 +74,13 @@ internal class SessionController
                 RETURNING id;
         ";
         var now = DateTime.UtcNow;
+        
+        if (startDate.HasValue)
+            startDate = startDate.Value.ToUniversalTime();
+        
+        if (finishDate.HasValue)
+            finishDate = finishDate.Value.ToUniversalTime();
+        
         var id = _connection.QuerySingle<int>(sql, new
         {
             Name = name, Created = now, Updated = now, Started = startDate ?? now, Finished = finishDate

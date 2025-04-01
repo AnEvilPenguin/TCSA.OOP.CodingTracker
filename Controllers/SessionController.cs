@@ -55,7 +55,7 @@ internal class SessionController
                 RETURNING id;
         ";
         var now = DateTime.UtcNow;
-        var id = _connection!.QuerySingle<int>(sql, new
+        var id = _connection.QuerySingle<int>(sql, new
         {
             Name = name, Created = now, Updated = now, Started = now
         });
@@ -71,7 +71,7 @@ internal class SessionController
                 RETURNING id;
         ";
         var now = DateTime.UtcNow;
-        var id = _connection!.QuerySingle<int>(sql, new
+        var id = _connection.QuerySingle<int>(sql, new
         {
             Name = name, Created = now, Updated = now, Started = startDate ?? now, Finished = finishDate
         });
@@ -89,7 +89,7 @@ internal class SessionController
             WHERE Id = @Id
         ";
 
-        return _connection!.QuerySingle<Session>(sql, new { Id = id });
+        return _connection.QuerySingle<Session>(sql, new { Id = id });
     }
 
     internal IEnumerable<Session> List()
@@ -98,7 +98,7 @@ internal class SessionController
             SELECT * FROM Sessions
         ";
 
-        return _connection!.Query<Session>(sql);
+        return _connection.Query<Session>(sql);
     }
 
     internal IEnumerable<Session> ListOpen()
@@ -108,7 +108,7 @@ internal class SessionController
             WHERE Finished IS NULL
         ";
 
-        return _connection!.Query<Session>(sql);
+        return _connection.Query<Session>(sql);
     }
 
     internal void Update(Session session)
@@ -121,7 +121,7 @@ internal class SessionController
             WHERE Id = @Id
         ";
 
-        _connection!.Execute(sql, new { session.Name, session.Updated, session.Started, session.Finished, session.Id });
+        _connection.Execute(sql, new { session.Name, session.Updated, session.Started, session.Finished, session.Id });
     }
 
     internal void Delete(Session session)
@@ -131,6 +131,6 @@ internal class SessionController
             WHERE Id = @Id
         ";
 
-        _connection!.Execute(sql, new { session.Id });
+        _connection.Execute(sql, new { session.Id });
     }
 }

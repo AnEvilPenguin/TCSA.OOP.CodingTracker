@@ -74,6 +74,13 @@ internal class MainMenu(SessionController sessionController) : AbstractMenu
                     .WithDescription("Clear all data from the application.")
                     .WithData(sessionController);
             });
+            
+            config.AddBranch("Session", (settings) =>
+            {
+                settings.AddCommand<NewSession>("New")
+                    .WithDescription("Create a new session.")
+                    .WithData(sessionController);
+            });
         });
         
         return app.Run(args);

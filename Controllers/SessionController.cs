@@ -1,6 +1,7 @@
 ﻿using System.Data.SQLite;
 using Dapper;
 using TCSA.OOP.CodingTracker.Model;
+using TCSA.OOP.CodingTracker.Util;
 
 namespace TCSA.OOP.CodingTracker.Controllers;
 
@@ -24,6 +25,8 @@ internal class SessionController
 
     private void Initialize()
     {
+        SqlMapper.AddTypeHandler(new DateTimeHandler());
+        
         _connection.Open();
 
         InitSessionsTable();

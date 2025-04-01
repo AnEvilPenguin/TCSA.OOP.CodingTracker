@@ -12,7 +12,7 @@ public class DateTimeHandler : SqlMapper.TypeHandler<DateTime>
 
     public override DateTime Parse(object value)
     {
-        return DateTime.SpecifyKind(DateTime.Parse(value.ToString()!), DateTimeKind.Utc);
+        return DateTime.Parse(value.ToString()!);
     }
     
     private string FormatDate(DateTime date) =>

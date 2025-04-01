@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using Spectre.Console.Cli;
 using TCSA.OOP.CodingTracker.Controllers;
+using static TCSA.OOP.CodingTracker.View.SessionView;
 
 namespace TCSA.OOP.CodingTracker.Commands;
 
@@ -20,6 +21,21 @@ internal class NewSession : Command<NewSessionSettings>
             AnsiConsole.WriteException(ex);
             return 3;
         }
+        
+        return 0;
+    }
+}
+
+internal class ListSessions : Command<SessionSettings>
+{
+    public override int Execute(CommandContext context, SessionSettings settings)
+    {
+        if (context.Data is not SessionController sessionController)
+            throw new ApplicationException("Session controller is not set.");
+        
+        var sessions = sessionController.List();
+        
+        DisplaySessions(sessions);
         
         return 0;
     }

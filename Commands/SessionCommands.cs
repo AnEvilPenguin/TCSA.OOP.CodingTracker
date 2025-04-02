@@ -79,6 +79,27 @@ internal static class SessionCommands
             return 0;
         }
     }
+
+    internal class DeleteSession : Command<GetSessionSettings>
+    {
+        public override int Execute(CommandContext context, GetSessionSettings settings)
+        {
+            var sessionController = GetSessionController(context);
+            
+            try
+            {
+                var session = sessionController.Get(settings.SessionId);
+                sessionController.Delete(session);
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.WriteException(ex);
+                return 6;
+            }
+            
+            return 0;
+        }
+    }
     
     internal class ListSessions : Command<SessionSettings>
     {

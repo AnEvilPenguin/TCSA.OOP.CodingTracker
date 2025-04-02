@@ -6,11 +6,8 @@ using TCSA.OOP.CodingTracker.Util;
 
 namespace TCSA.OOP.CodingTracker.Commands;
 
-public class UpdateSessionSettings : CommandSettings
+public class UpdateSessionSettings : GetSessionSettings
 {
-    [CommandArgument(0, "<SESSION_ID>")] 
-    public int SessionId { get; set; } = -1;
-    
     [CommandOption("-f|--finish <FINISH_TIME>")]
     public string FinishTime { get; set; } = String.Empty;
     internal DateTime Finish { get; set; }
@@ -22,8 +19,9 @@ public class UpdateSessionSettings : CommandSettings
     
     public override ValidationResult Validate()
     {
-        if (SessionId < 0)
-            return ValidationResult.Error("SESSION_ID is required.");
+        var result = base.Validate();
+        if (!result.Successful) 
+            return result;
 
         if (string.IsNullOrWhiteSpace(FinishTime))
             return ValidationResult.Error("FINISH_TIME is required.");

@@ -35,6 +35,29 @@ internal static class SessionCommands
             return 0;
         }
     }
+
+    internal class GetSession : Command<GetSessionSettings>
+    {
+        public override int Execute(CommandContext context, GetSessionSettings settings)
+        {
+            var sessionController = GetSessionController(context);
+
+            Session session;
+            try
+            {
+                session = sessionController.Get(settings.SessionId);
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.WriteException(ex);
+                return 4;
+            }
+
+            DisplaySession(session);
+            
+            return 0;
+        }
+    }
     
     internal class UpdateSession : Command<UpdateSessionSettings>
     {
@@ -43,7 +66,7 @@ internal static class SessionCommands
             if (settings.Session == null)
             {
                 AnsiConsole.MarkupLine("[bold red]Failed to look up session.");
-                return 4;
+                return 5;
             }
             
             var session = settings.Session;

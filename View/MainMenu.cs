@@ -81,6 +81,10 @@ internal class MainMenu(SessionController sessionController) : AbstractMenu
                     .WithDescription("Create a new session.")
                     .WithData(sessionController);
                 
+                settings.AddCommand<SessionCommands.GetSession>("Get")
+                    .WithDescription("Get a session by id.")
+                    .WithData(sessionController);
+                
                 settings.AddCommand<SessionCommands.UpdateSession>("Update")
                     .WithDescription("Update a session.")
                     .WithData(sessionController);

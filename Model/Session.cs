@@ -6,23 +6,26 @@ internal class Session
     internal required string Name { get; init; }
     internal DateTime Created { get; init; } = DateTime.UtcNow;
     internal DateTime Updated { get; set; } = DateTime.UtcNow;
-    internal DateTime Started { get; init; } = DateTime.UtcNow;
+
+    internal DateTime Started
+    {
+        get => _started;
+        init
+        {
+            _started = value.ToUniversalTime();
+        }
+    }
 
     internal DateTime? Finished
     {
         get => _finished;
-        set
-        {
-            if (value.HasValue)
-                _finished = value.Value.ToUniversalTime();
-            
-            _finished = value;
-        }
+        set => _finished = value?.ToUniversalTime();
     }
 
     internal TimeSpan Duration => (Finished ?? DateTime.UtcNow) - Started;
     
     private DateTime? _finished;
+    private DateTime _started = DateTime.UtcNow;
 
     internal string GetDuration()
     {

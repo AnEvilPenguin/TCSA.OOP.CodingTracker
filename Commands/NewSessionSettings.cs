@@ -16,10 +16,10 @@ internal class NewSessionSettings : CommandSettings
     // When providing the option it cannot be optional
     // Think about is as when passing -s there must also be a string afterwards
     [CommandOption("-s|--start <START_TIME>")]
-    public string? StartTime { get; set; } = String.Empty;
+    public string StartTime { get; set; } = String.Empty;
     
     [CommandOption("-f|--finish <FINISH_TIME>")]
-    public string? FinishTime { get; set; } = String.Empty;
+    public string FinishTime { get; set; } = String.Empty;
     
     internal DateTime? Start { get; set; }
     internal DateTime? Finish { get; set; }

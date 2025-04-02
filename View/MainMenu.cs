@@ -77,12 +77,20 @@ internal class MainMenu(SessionController sessionController) : AbstractMenu
             
             config.AddBranch("Session", (settings) =>
             {
-                settings.AddCommand<NewSession>("New")
+                settings.AddCommand<SessionCommands.NewSession>("New")
                     .WithDescription("Create a new session.")
                     .WithData(sessionController);
                 
-                settings.AddCommand<ListSessions>("List")
+                settings.AddCommand<SessionCommands.UpdateSession>("Update")
+                    .WithDescription("Update a session.")
+                    .WithData(sessionController);
+                
+                settings.AddCommand<SessionCommands.ListSessions>("List")
                     .WithDescription("List all sessions.")
+                    .WithData(sessionController);
+                
+                settings.AddCommand<SessionCommands.ListOpenSessions>("ListOpen")
+                    .WithDescription("List open sessions.")
                     .WithData(sessionController);
             });
         });

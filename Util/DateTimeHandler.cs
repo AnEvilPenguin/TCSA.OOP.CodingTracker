@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using Dapper;
-using static TCSA.OOP.CodingTracker.Util.Helpers;
 
 namespace TCSA.OOP.CodingTracker.Util;
 
@@ -13,6 +12,16 @@ public class DateTimeHandler : SqlMapper.TypeHandler<DateTime>
 
     public override DateTime Parse(object value)
     {
-        return DateTime.SpecifyKind(DateTime.Parse(value.ToString()), DateTimeKind.Utc);
+        if (value.ToString()!.EndsWith("Z"))
+        {
+            // If the value is explicitly marked as UTC with 'Z', parse as UTC
+            return DateTime.Parse(value.ToString()!, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        }
+
+        // Otherwise, interpret as local time or leave as unspecified
+        return DateTime.Parse(value.ToString()!);
     }
+    
+    private string FormatDate(DateTime date) =>
+        date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
 }
